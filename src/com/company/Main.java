@@ -59,6 +59,7 @@ import java.util.Scanner;
             List<GameResult> top = leaderBoard.subList(0, maxDisplay);
             for (GameResult r : top) {
                 System.out.printf("\t %s \t\t %8d \t\t %5.1f sec\n", r.name, r.attempts, r.time / 1000.0);
+                //форматирование        отступ на 8 символов отступ на 5 символов, 1 символ после запятой//
             }
         }
 
