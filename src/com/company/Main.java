@@ -1,5 +1,12 @@
 package com.company;
 
+
+
+import java.io.IOException;
+import java.io.Writer;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.InputMismatchException;
@@ -9,8 +16,8 @@ import java.util.Scanner;
 
     public class Main {
         private static final Scanner scanner = new Scanner(System.in);
+        static Path boardPath = (Path) Paths.get("leaderbord.txt");
         private static final List<GameResult> leaderBoard = new ArrayList<>();
-
 
 
         public static void main(String[] args) {
@@ -50,11 +57,12 @@ import java.util.Scanner;
                 System.out.print("Do you want to play again? (Y/n) ");
             } while (!scanner.nextLine().equals("n"));
             System.out.println("Good bye!");
+            storeLeaderBord();
         }
 
         private static void printLeaderBoard() {
             System.out.println("Leader Board:");
-            System.out.println("\t Name \t\t Attempts \t\t Time");
+            System.out.println("\t Name \t\t Attempts \t\t Time");//  \t - это табуляция ,к-во t = к-во табуляций//
             int maxDisplay = Math.min(4, leaderBoard.size());
             List<GameResult> top = leaderBoard.subList(0, maxDisplay);
             for (GameResult r : top) {
@@ -98,7 +106,39 @@ import java.util.Scanner;
             }
         }
 
+        static List<GameResult> loadBord() {
+            List<GameResult> result = new ArrayList<>();
+            try (Scanner in = new Scanner(boardPath)) {
+                while (in.hasNext()) {
+                    GameResult r = new GameResult();
+                    r.name = in.next();
+                    r.attempts = in.nextInt();
+                    r.time = in.nextLong();
+                    result.add(r);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return result;
+        }
 
 
 
-}
+        public static void storeLeaderBord() {
+            try (Writer out = Files.newBufferedWriter((java.nio.file.Path) boardPath)) {
+                for (GameResult r : leaderBoard){
+                    String line = String.format("%s %d %d\n", r.name, r.attempts, r.time);
+                    out.write(line);
+                }
+
+
+            } catch (IOException e) {
+                System.out.println("Error writting to file");
+            }
+        }
+    }
+
+
+
+
+
