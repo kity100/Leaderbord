@@ -111,9 +111,10 @@ import java.util.Scanner;
             try (Scanner in = new Scanner(boardPath)) {
                 while (in.hasNext()) {
                     GameResult r = new GameResult();
-                    r.name = in.next();
+                    r.name = in.nextLine();
                     r.attempts = in.nextInt();
                     r.time = in.nextLong();
+                    in.nextLine();
                     result.add(r);
                 }
             } catch (IOException e) {
